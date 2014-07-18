@@ -1,69 +1,14 @@
 <html>
     <head>
-    <!--Load the AJAX API-->
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <?php
-
-        require("station.php");
-        $con = mysqli_connect("localhost","root","temppassword123!","maindb");
-        if (mysqli_connect_errno($con)) {
-		echo "Failed to connect to MySQL: " . mysqli_connect_error();
-        }
-
-        $sql = "SELECT `station`, COUNT(*) as freq FROM `responses` GROUP BY `station`";
-		$result = mysqli_query($con, $sql);
-		$rows = mysqli_num_rows($result);
-		$stations = array();
-		$count = 0;
-		$stations = array();
-		while ($array = mysqli_fetch_array($result)) {
-			$station = new Station($array[0]);
-			array_push($stations, $station);
-		}
-		
-		foreach ($stations as &$station) {
-			$sql = "SELECT COUNT(*) as freq FROM `responses` WHERE feedback = 1 AND station = '".$station->name."'";
-			$result = mysqli_query($con, $sql);
-			$value = mysqli_fetch_object($result);
-			$station->positive = $value->freq;;
-		}
-		
-		foreach ($stations as &$station) {
-			$sql = "SELECT COUNT(*) as freq FROM `responses` WHERE feedback = 0 AND station = '".$station->name."'";
-			$result = mysqli_query($con, $sql);
-			$value = mysqli_fetch_object($result);
-			$station->negative = $value->freq;;
-		}
-        
-        for ($i = 0; $i < count($stations) - 1; $i++)
-		{
-			$rowsString = $rowsString."['".$stations[$i]->name."',".round($stations[$i]->getRating()*100,0)."],";
-		}
-        $rowsString = $rowsString.'['.$stations[count($stations)]->name.','.round($stations[count($stations)]->getRating()*100,0).']';
-        echo $rowsString;
-    ?>
-    <script type="text/javascript">
-        google.load('visualization', '1.0', {'packages':['corechart']});
-        google.setOnLoadCallback(drawChart);
-        
-        function drawChart() {
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Stations');
-            data.addColumn('number', 'feedback');
-            data.addRows("[" + <?php echo $rowsString; ?> + "]");
-
-            // Set chart options
-            var options = {'title':'Test',
-                            'width':400,
-                            'height':300};
-                           
-            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-            chart.draw(data, options);
-        }
-    </script>
   </head>
   
   <body>
-	<div id="chart_div"></div>
+	<span style="background-color:#DC241F;color:#FFFFFF">NSL   North South Line</span> <br />
+    <span style="background-color:#009530;color:#FFFFFF">EWL   East West Line</span> <br />
+    <span style="background-color:#9016B2;color:#FFFFFF">NEL   North East Line</span> <br />
+    <span style="background-color:#FF9A00;color:#FFFFFF">CCL   Circle Line</span> <br />
+    <span style="background-color:#0354A6;color:#FFFFFF">DTL   Downtown Line</span> <br />
+    <span style="background-color:#734538;color:#FFFFFF">TSL   Thomson Line</span> <br />
+    <span style="background-color:#748477;color:#FFFFFF">LRT   Light Rail Transits</span> <br />
   </body>
 </html>

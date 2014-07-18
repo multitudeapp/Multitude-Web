@@ -1,6 +1,4 @@
-
 <?php
-	
 	//phpinfo();
 	// Start of stupid code
 	$rand = rand(0,100);
@@ -9,19 +7,16 @@
 	}
 	// End
 	require("station.php");
-	require("db.php");
+	$con = mysqli_connect("overpowered.cloudapp.net","root","temppassword123!","maindb");
+	if (mysqli_connect_errno($con)) {
+		echo "Failed to connect to MySQL: " . mysqli_connect_error();
+	}
 	if (!isset($_GET['action'])) {
 		$_GET['action'] = "";
 	}
 	
 	if ($_GET['action'] == "list") {
-		?>
-		<html>
-			<head>
-				<link rel="stylesheet" href="style.css" type="text/css" />
-			</head>
-			<body>
-		<?php
+		
 		$mainStationArray = 
 			array(
 				"NS" => array(
@@ -208,7 +203,7 @@
 		echo date('Y-m-d H:i:s');
 		?>
 		
-		<table border=1>
+		<table width="90%">
 			<tr>
 				<td align="left">
 					<img src="MultitudeLogo.png" height="100px" />
@@ -216,18 +211,17 @@
 				<td>
 				</td>
 				<td align="right">
-					<form method="GET">
-						<input name="filter"></input>
-						<input type="submit" value="Search"></input>
-						<input type="hidden" name="action" value="list"></input>
-					</form>
+				Search
 				</td>
 			<!-- </tr> Intentionally removed -->
 			<?php
-				if(isset($_GET['filter'])) {
-					$line = htmlspecialchars($_GET['filter']);
-					$filter = "WHERE `station` LIKE '%".$line."%'";
-					
+				if(isset($_GET['line'])) {
+					$line = htmlspecialchars($_GET['line']);
+					$filter = "WHERE `station` = 'IGNORETHIS";
+					foreach ($mainStationArray[$line] as &$station) {
+						$filter = "' OR `station` = '".$station;
+					}
+					$filter .= "'";
 				} else {
 					$filter = "";
 				}
@@ -253,21 +247,48 @@
 					$value = mysqli_fetch_object($result);
 					$station->negative = $value->freq;;
 				}
+				
+				
+				
+				// Start displaying 
 				function displayLogo($name, $mainArray) {
-					$result = "";
+					
+					
+					//for ($i = 0; $i < count($mainArray); $i++) { // For every line
 					foreach ($mainArray as $temp) {
+						
+						//$temp = $mainArray[$i];
 						foreach ($temp as $key => $value) {
 							if ($value == $name) {
-								$result = $key;
-								break;
+								echo $key;
 							}
 						}
-						if ($result != "") {
-							break;
+						
+						/*
+						for ($j = 0; $j < count($temp); $j++) { // For every station
+							
+							if ($temp[$j] == $name) {
+								echo key($temp[$j]);
+							}
+							
 						}
+						*/
+						
+					
 					}
-					$code = substr($result, 0, 2);
-					echo '<span class="icon '.$code.'">'.$result.'</span>';
+					
+					
+					/*
+					
+					foreach ($mainArray as &$line) {
+						$code = array_search($name, $line);
+						echo "<script>alert('I am looking for ".$name." which has a code of ".$code."');</script>";
+					}
+					//if ($code != "") {
+						echo $code . " | ";
+					//}
+					
+					*/
 				}
 				
 				
@@ -276,7 +297,7 @@
 					if ($i % 3 == 0) {
 						echo "</tr><tr>";
 					}
-					echo '<td onclick="window.location=\'details.php?station='.urlencode($station->name).'\';">';
+					echo "<td>";
 					displayLogo($station->name, $mainStationArray);
 					echo '<span class="name">'.$station->name.'</span>';
 					echo '<span class="rating">'.round($station->getRating()*100,0).'%</span>';
