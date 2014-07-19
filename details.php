@@ -1,9 +1,18 @@
 <html>
     <head>
-    <link rel="stylesheet" href="style.css" type="text/css" />
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript" src="wordcloud.js"></script>
-<?php
+    	<link rel="stylesheet" href="assets/css/foundation.css" type="text/css" />
+		<link rel="stylesheet" href="assets/css/normalize.css" type="text/css" />
+    	<link rel="stylesheet" href="assets/css/style-detail.css" type="text/css" />
+    	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	</head>
+<body>
+	<div id="container">
+	<header class="row">
+		<a href="index.php?action=list"><img id="banner-logo" src="Multitude.png" height="100px"/></a>
+	</header>
+	<?php 
+
+		
 $mainStationArray = 
 			array(
 				"NS" => array(
@@ -188,6 +197,7 @@ $mainStationArray =
 						)
 				);
 	require("station.php");
+	require("message.php");
 	require("db.php");
 	if (isset($_GET['station'])) {
 		$station = htmlspecialchars($_GET['station']);
@@ -213,25 +223,38 @@ $mainStationArray =
 			$no = $station->negative;
 			$total = $station->getTotal();
             $stationName = $station->name;
-			//echo "<br /> Positive: " . $yes;
-			//echo "<br /> Negative: " . $no;
             $rowsString = "[['Positive (".$yes.")',".$yes."],['Negative (".$no.")',".$no."]]";
 			// WORD CLOUD??
 			
 			// Messages
 			
-			$sql = "SELECT * FROM `responses` WHERE station = '".$station->name."';";
+			$sql = "SELECT * FROM `responses` WHERE station = '".$station->name."' ORDER BY `timestamp` DESC;";
 			$result = mysqli_query($con, $sql);
 			$rows = mysqli_num_rows($result);
 			$messages = array();
 			while($array = mysqli_fetch_array($result)) {
 				if (!$array['message'] == "") {
-					array_push($messages, $array['message']);
+					$message = new Message($array['message'], $station->name, $array['timestamp']);
+					array_push($messages, $message);
 				}
 			}
-			//echo '<input id="list" value="'.implode($messages, ' ').'"></input>';
-            $rowsTables = "[['".implode($messages, "'],['")."']]";
-            //Backend done
+			$messageString = "[['";
+			if (count($messages) == 0) {
+				echo "No detailed feedback has been given yet";
+			} else {
+				$messageTable = "<table id='feedback' align='center'>";
+				foreach($messages as &$message) {
+					$messageTable .= "<tr id='messages'><td class='message'><span class='message'>".$message->message."</span>";
+					$messageTable .= "<br /><small class='timestamp'>".$message->timestamp."</small></td></tr>";
+					$messageString .= $message->message."'],['";
+				}
+				$messageString = substr($messageString, 0, strlen($messageString) - 3)."]";
+				$messageTable .= "</table>";
+			}
+            //$rowsTables = "[['".implode($messages, "'],['")."']]";
+			$rowsTables = $messageString;
+			
+		//Backend done
             //Presenting on webpage part
             function displayLogo($name, $mainArray) {
 					$result = "";
@@ -247,22 +270,29 @@ $mainStationArray =
 						}
 					}
 					$code = substr($result, 0, 2);
-					echo '<span class="bigicon '.$code.'">'.substr($result, 0, 2).'</span>';
+					echo '<p class="bigicon '.$code.'">'.substr($result, 0, 2).'</p>';
             }
-            
-            echo '<img src="Multitude.png" width="300" height="100"/><table><tr><td>';
             displayLogo($station -> name, $mainStationArray);
-            echo '</td><td><b class="detailname">'.$station->name.'</b><br />';
-            if (round($station->getRating()*100,0) < 50) {
-                echo '<b class="detailnamebad">'.round($station->getRating()*100,0).'%</b>';
+
+	?>
+<?php
+			
+            echo '<table style="detailstable"><tr><td>';
+            echo '</td><td><h3 class="detailname">'.$station->name.'</h3>';
+            if (round($station->getRating()*100,0) < 66) {
+                if (round($station->getRating()*100,0) < 33) {
+                    echo '<p class="detailnamebad">'.round($station->getRating()*100,0).'%</p>';
+                } else {
+                    echo '<p class="detailnameavg">'.round($station->getRating()*100,0).'%</p>';
+                }
             } else {
-                echo '<b class="detailnamegood">'.round($station->getRating()*100,0).'%</b>';
+                echo '<p class="detailnamegood">'.round($station->getRating()*100,0).'%</p>';
             }
             
 		}
 	}
 ?>
-<script type="text/javascript">
+	<script type="text/javascript">
 		function outside(arr) {
 			var x = getElementsAndFreq(arr);
 			var result = new Array();
@@ -290,9 +320,9 @@ $mainStationArray =
 
         google.load('visualization', '1.0', {'packages':['corechart','table']});
         google.setOnLoadCallback(drawChart);
-        google.setOnLoadCallback(drawTableMessage);
-        var canvas = document.getElementById('canvvas');
-        var list = document.getElementById('list').value.split(' ');
+        //google.setOnLoadCallback(drawTableMessage);
+        //var canvas = document.getElementById('canvvas');
+        //var list = document.getElementById('list').value.split(' ');
 		
 		drawCanvas();
         
@@ -332,25 +362,24 @@ $mainStationArray =
 
             // Set chart options
             var options = {'title':'',//<?php echo $stationName; ?>',
-                            'width':250,
                             'height':250,
                             'pieHole':0.8,
                             'legend':{position:'none'},
                             'pieSliceText':'none',
-                            'colors': ['#29d629','#FF0000'],
+                            'colors': ['#2fd09a','#bb4452'],
                             };
                            
             var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
             chart.draw(data, options);
         }
     </script>
-  </head>
   
-  <body>
-    </td>
-    <td>
+    
     <div id="chart_div"></div>
-    </td></tr></table><br/>
+    
     <div id="table_div"></div>
+	
+	<div id="messageTable"><?php echo $messageTable; ?></div>
+</div>
   </body>
 </html>

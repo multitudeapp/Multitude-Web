@@ -1,28 +1,25 @@
-
 <?php
-	
 	//phpinfo();
-	// Start of stupid code
-	$rand = rand(0,100);
-	if ($rand == 0) {
-		echo '<img src="http://scienceblogs.com/gregladen/files/2012/12/Beautifull-cat-cats-14749885-1600-1200.jpg" />';
-	}
+	
 	// End
 	require("station.php");
 	require("db.php");
 	if (!isset($_GET['action'])) {
 		$_GET['action'] = "";
 	}
-	
+
 	if ($_GET['action'] == "list") {
 		?>
 		<html>
-			<head>
-				<link rel="stylesheet" href="style.css" type="text/css" />
+			<head>				
+				<link rel="stylesheet" href="assets/css/foundation.css" type="text/css" />
+				<link rel="stylesheet" href="assets/css/normalize.css" type="text/css" />
+				<link rel="stylesheet" href="assets/css/style.css" type="text/css" />
+				<title>Multitude Control Panel</title>
 			</head>
-			<body>
+		<body>
 		<?php
-		$mainStationArray = 
+		$mainStationArray =
 			array(
 				"NS" => array(
 							"NS1" => "Jurong East",
@@ -205,24 +202,18 @@
 							"TS22" => "Gardens by the Bay"
 						)
 				);
-		echo date('Y-m-d H:i:s');
+		//echo date('Y-m-d H:i:s');
 		?>
-		
-		<table border=1>
-			<tr>
-				<td align="left">
-					<img src="MultitudeLogo.png" height="100px" />
-				</td>
-				<td>
-				</td>
-				<td align="right">
-					<form method="GET">
-						<input name="filter"></input>
-						<input type="submit" value="Search"></input>
-						<input type="hidden" name="action" value="list"></input>
-					</form>
-				</td>
-			<!-- </tr> Intentionally removed -->
+		<div id="container">
+		<header class="row"> 
+			<img id="banner-logo" src="Multitude.png" height="100px"/>
+			<form method="GET">
+				<input name="filter"></input>
+				<input type="submit" value="Search"></input>
+				<input type="hidden" name="action" value="list"></input>
+			</form>
+		</header>
+		<table>
 			<?php
 				if(isset($_GET['filter'])) {
 					$line = htmlspecialchars($_GET['filter']);
@@ -267,19 +258,19 @@
 						}
 					}
 					$code = substr($result, 0, 2);
-					echo '<span class="icon '.$code.'">'.$result.'</span>';
+					echo '<p class="icon stn-code '.$code.'">'.$result.'</p>';
 				}
-				
-				
+
+
 				for ($i = 0; $i < count($stations); $i++) {
 					$station = $stations[$i];
 					if ($i % 3 == 0) {
 						echo "</tr><tr>";
 					}
-					echo '<td onclick="window.location=\'details.php?station='.urlencode($station->name).'\';">';
+					echo '<td class="btn" onclick="window.location=\'details.php?station='.urlencode($station->name).'\';">';
 					displayLogo($station->name, $mainStationArray);
-					echo '<span class="name">'.$station->name.'</span>';
-					echo '<span class="rating">'.round($station->getRating()*100,0).'%</span>';
+					echo '<h3 class="name">'.$station->name.'</h3>';
+					echo '<p class="rating">'.round($station->getRating()*100,0).'%</p>';
 					echo "</td>";
 				
 				}
@@ -288,29 +279,27 @@
 		
 		
 		<?php
-		
-		
-		
-		echo "<table><tr>";
+		/* Obsolete
+		echo "<table><tr class='row'>";
 		for ($i = 0; $i < count($stations); $i++)
 		{
 			if ($i % 4 == 0) {
-				echo "</tr><tr>";
+				echo "</tr><tr class='row'>";
 			}
 			echo '<td><div id="'.$stations[$i]->name.'"><span class="name"><a href="details.php?station='.$stations[$i]->name.'">'.$stations[$i]->name.'</a></span> | <span class="rating">'.round($stations[$i]->getRating()*100,0).'</span></div></td>';
 		}
 		echo "</table>";
+		*/
 		?>
+	</div>
 		
 		<script>
-			setTimeout('location.reload()',1000);
+			setTimeout('location.reload()',30000);
 			var ele = document.getElementsByClassName('name');
-			//for (var x in ele) {
 			for (var i = 0; i < ele.length; i++) {
 				var rating = ele[i].parentNode.childNodes[2].innerHTML;
 				ele[i].parentNode.style.background = getColor(rating);
 			}
-			
 			function getColor(percent) {
 				var R = parseInt((100 - percent)/100 * 255);
 				var G = parseInt((0 + percent)/100 * 255);
@@ -340,7 +329,7 @@
 		//$rows = mysqli_num_rows($result);
 		//echo $result;
 		
-	} else if ($_POST['action'] == "add"){
+	} else if ($_GET['action'] == "add"){
 	
 	}
 	

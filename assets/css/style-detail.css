@@ -1,0 +1,104 @@
+@font-face {
+font-family: ProximaNova;
+src: url("ProximaNovaRegular.otf") format("opentype");
+}
+
+@font-face {
+font-family: ProximaNova-Bold;
+src: url("ProximaNovaSemibold.otf") format("opentype");
+}
+
+h3 {
+	font-family: ProximaNova-Bold;
+	font-size: 2.3em;
+	text-transform: uppercase;
+	margin: 0;
+}
+
+p {
+	font-family: ProximaNova;
+	font-size: 2em;
+	margin: 0;
+}
+
+#banner-logo {
+	width: 50%;
+}
+
+body {
+	margin: 0 auto;
+	width: 80%;
+}
+
+#container {
+	text-align:center;
+	margin: 0 auto;
+	width: 90%;
+}
+
+.detailnamebad {
+	color: #f82537;
+}
+
+.detailnameavg {
+	color: #eec611;
+}
+
+.detailnamegood {
+	color: #32bd9f;
+}
+
+.NS {
+	background-color: #DC241F;
+}
+.CE {
+	background-color: #FF9A00;
+}
+
+.CC {
+	background-color: #FF9A00;
+}
+.NE {
+	background-color: #9016B2;
+}
+.EW {
+	background-color: #009530;
+}
+.CG {
+	background-color: #009530;
+}
+.DT {
+	background-color: #0354A6;
+}
+.TS {
+	background-color: #734538;
+}
+
+.bigicon {
+	padding: 5px;
+	color: white;
+}
+
+table {
+	margin: 0 auto;
+	width:80%;
+	text-align:  center;
+	 border-collapse:separate;
+    border-spacing:0 5px;
+}
+
+#messageTable {
+	background-color: #828282;
+	margin: 0 auto;
+	text-align: center;
+	padding:30px;
+}
+
+tr#messages {
+	background-color: white;
+	padding-bottom: 1em;
+}
+
+td.message {
+	padding: 10px;
+}

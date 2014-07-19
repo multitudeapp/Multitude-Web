@@ -178,10 +178,113 @@
 		"Marina South",
 		"Gardens by the Bay"
 		);
+		$feedback = array (
+			"Weird people taking selfie",
+			"Unable to use Twitter in MRT",
+			"Unable to use Snapchat in MRT",
+			"Unable to use Internet in MRT",
+			"Unable to use Instagram in MRT",
+			"Unable to use Facebook in MRT",
+			"Unable to use Carousell in MRT",
+			"Unable to use Baidu in MRT",
+			"Unable to send Whatsapp messages in MRT tunnels",
+			"Unable to send SMSes in MRT tunnels",
+			"Unable to make phone calls in MRT tunnels",
+			"Train waits at station for too long",
+			"Train travels too slowly",
+			"Train service starts too late",
+			"Train service ends too early",
+			"Train frequency too low",
+			"Train frequency is low during non-peak hours",
+			"Train doors close too fast",
+			"Train disruption",
+			"Train always packed during peak hours",
+			"Top up machine spoil",
+			"Too crowded to take selfie",
+			"There is no internet while the train is underground",
+			"There are people who are occupying 2 seats",
+			"There are babies who constantly cries all the time throughout the journey",
+			"The train is extremely stuffy",
+			"The train is extremely hot",
+			"The train is extremely dirty",
+			"The train is always super crowded",
+			"The station staff is extremely unhelpful",
+			"The station lifts are extremely small and always full",
+			"The signs in the station is extremely misleading",
+			"The signboard display displayed the wrong timings",
+			"The MRT Door jammed and caused the MRT to not be able to move off",
+			"The driver drove the train extremely slowly",
+			"The air con on the MRT is not working",
+			"The air con in the station is not working",
+			"Teenagers public display of affection",
+			"Station too crowded",
+			"Station toilet floors wet",
+			"Station stinks and is unhygenic",
+			"Station staff rude and unfriendly",
+			"Station staff are extremely bad at handling train disruptions",
+			"Station lights faulty. Always flickering",
+			"Station gantry spoil",
+			"Station escalators spoil",
+			"Station escalators slow",
+			"Station escalators always change direction",
+			"Sometimes in a rush, train keeps stopping",
+			"Someone stole my wallet! Made police report",
+			"Smell people with body odour",
+			"Scared being stomp-ed",
+			"People with earphones unaware of their surroundings",
+			"People with bulky bags",
+			"People unwilling to move in",
+			"People unwilling to give up seat",
+			"People sits all over the floor, disrupting others from navigating the train",
+			"People rushing in get stuck at door, wasting time",
+			"People not bothered to queue up",
+			"People leave their bags lying all over the floor",
+			"People don't wait for people to alight before boarding",
+			"People don't give way",
+			"People continuously complaining about not giving up seats",
+			"People brought durians onboard train",
+			"People are talking extremely loudly on the MRT",
+			"People are blasting music on their phone speakers",
+			"People are blasting extremely loud music through their earphones",
+			"People all gather around the MRT door, preventing people from entering the train",
+			"Occasional dramatic fights and quarrels on the train",
+			"Not enough hand rails",
+			"Noisy people talking loudly on phone",
+			"No space to take selfie",
+			"No place to put heavy bags",
+			"No one give seat to NS men",
+			"No one give seat to elderly",
+			"No money to travel via MRT",
+			"No 4G signal in tunnel",
+			"No 3G signal in tunnel",
+			"My phone goes 'No Signal' whenever I am underground",
+			"MRT spends time open and closing doors multiple times",
+			"Machine eat my money",
+			"Lost contact lens in train. If found call 91234567",
+			"Long train waiting times",
+			"Little kids are running around on the MRT station",
+			"Little kids are running around on the MRT",
+			"Late for work because the train service got disrupted",
+			"Late for work because the train is too slow",
+			"Late for work because the train is always too crowded",
+			"Incosiderate people",
+			"Inconsiderate people taking selfie",
+			"Inappropriate behaviour",
+			"Food dropped on the MRT floor, no one clean up",
+			"Fare hikes again. When will this end?",
+			"Elderly rushing into trains",
+			"Cannot drink plain water",
+			"Cannot drink any beverages",
+			"Aunties staring at teenagers",
+			"All of the escalators at the station is not working",
+			"A wrong anncouncement was made"
+		);
+
+		
 		$h = 0;
 	foreach ($arr as &$station) {
 		
-		$rand = rand(1,100);
+		$rand = rand(1,50);
 		for($i = 0; $i < $rand; $i++) {
 			$rand2 = rand(0,100);
 			if ($rand2 < 75) {
@@ -189,8 +292,10 @@
 			} else {
 				$rand2 = 0;
 			}
-			echo "<br />Doing " . $h . " out of " . count($arr) . " | Iteration: ".$i." out of ".$rand2;
-			$sql = "INSERT INTO `responses` VALUES (NULL, NULL, '".$station."',". $rand2 .",NULL);";
+			$rand3 = rand(0, count($feedback) - 1);
+			//echo "<br />Doing " . $h . " out of " . count($arr) . " | Iteration: ".$i." out of ".$rand2;
+			echo "<br />\nDoing " . $h . " out of " . count($arr);
+			$sql = "INSERT INTO `responses` VALUES (NULL, NULL, '".$station."',". $rand2 .",'".$feedback[$rand3]."');";
 			$result = mysqli_query($con, $sql);
 		}
 		$h++;
