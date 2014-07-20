@@ -1,4 +1,4 @@
-RPiHTML for CodeXtremeApps 2014
+Multitude - A hack for CodeXtremeApps 2014
 =======
 
-HTML File for Team Overpowered Backend
+Just some web code for Multitude
