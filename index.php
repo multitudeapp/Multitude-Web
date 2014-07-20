@@ -206,7 +206,7 @@
 		?>
 		<div id="container">
 		<header class="row"> 
-			<img id="banner-logo" src="Multitude.png" height="100px"/>
+			<img id="banner-logo" src="assets/images/Multitude.png" height="100px"/>
 			<form method="GET">
 				<input name="filter"></input>
 				<input type="submit" value="Search"></input>

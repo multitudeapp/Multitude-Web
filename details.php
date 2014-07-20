@@ -8,7 +8,7 @@
 <body>
 	<div id="container">
 	<header class="row">
-		<a href="index.php?action=list"><img id="banner-logo" src="Multitude.png" height="100px"/></a>
+		<a href="index.php?action=list"><img id="banner-logo" src="assets/images/Multitude.png" height="100px"/></a>
 	</header>
 	<?php 
 
