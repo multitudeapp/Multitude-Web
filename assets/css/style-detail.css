@@ -82,8 +82,8 @@ body {
 table {
 	margin: 0 auto;
 	width:80%;
-	text-align:  center;
-	 border-collapse:separate;
+	/* text-align: center; */
+	border-collapse:separate;
     border-spacing:0 5px;
 }
 
@@ -101,4 +101,7 @@ tr#messages {
 
 td.message {
 	padding: 10px;
+}
+.comment {
+	display: none;
 }
