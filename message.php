@@ -6,13 +6,25 @@
 		public $station = "Default Station";
 		public $timestamp;
 		public $replyTo;
-		public function __construct($id, $msg, $s = "Default Station", $ts = "", $r = "") {
+        public $originalMsg;
+		public function __construct($id, $msg, $s = "Default Station", $ts = "", $r = "", $or = "") {
 			$this->id = $id;
 			$this->message = $msg;
 			$this->station = $s;
 			$this->timestamp = $ts;
-			$replyTo = $r;
+            //$replyTo=$r;
+			$this->replyTo = $r;
+            $this->originalMsg = $or;
 		}
+        /*
+        public function __construct($id, $msg, $s = "Default Station", $ts = "", $r = "") {
+			$this->id = $id;
+			$this->message = $msg;
+			$this->station = $s;
+			$this->timestamp = $ts;
+            //$replyTo=$r;
+			$this->replyTo = $r;
+		}*/
 	}
 ?>
 	

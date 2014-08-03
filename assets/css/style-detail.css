@@ -105,3 +105,9 @@ td.message {
 .comment {
 	display: none;
 }
+
+td.submessage {
+    background-color: #d3d3d3;
+    padding: 10px;
+    margin-left: 50px;
+}

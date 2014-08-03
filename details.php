@@ -43,13 +43,15 @@
 			
 			// Messages
 			
-			$sql = "SELECT * FROM `responses` WHERE station = '".$station->name."' ORDER BY `timestamp` DESC;";
+            //$sql = "SELECT * FROM `responses` WHERE station = '".$station->name."' ORDER BY `timestamp` DESC;";
+			$sql = "SELECT res.UID, res.timestamp, res.station, res.feedback, res.message, res.replyTo, r.message mes FROM `responses` res LEFT JOIN maindb.responses r on r.UID = res.replyTo WHERE res.station = '".$station->name."' ORDER BY res.timestamp DESC;";
 			$result = mysqli_query($con, $sql);
 			$rows = mysqli_num_rows($result);
 			$messages = array();
 			while($array = mysqli_fetch_array($result)) {
 				if (!$array['message'] == "") {
-					$message = new Message($array['UID'], $array['message'], $station->name, $array['timestamp'], $array['replyTo']);
+                    //$message = new Message($array['UID'], $array['message'], $station->name, $array['timestamp'], $array['replyTo']);
+					$message = new Message($array['UID'], $array['message'], $station->name, $array['timestamp'], $array['replyTo'], $array['mes']);
 					array_push($messages, $message);
 				}
 			}
@@ -59,15 +61,30 @@
 			} else {
 				$messageTable = "<table id='feedback' align='center'>";
 				foreach($messages as &$message) {
+                    if ($message->replyTo != "") {
+                    } else {
 					$messageTable .= "<tr id='messages'><td class='message' id='message".$message->id."'><span class='message'>".$message->message."</span>";
 					$messageTable .= "<br /><small class='timestamp'>".$message->timestamp."</small>";
-					if ($message->replyTo != "") {
-						$messageTable .= "<small class='response'>  In response to ".$message->replyTo.'</small>';
-					} else {
+                    //echo '<script>console.log("Message:" + '.$message->replyTo.' + "");</script>';
+					//if ($message->replyTo != "") {
+					//	$messageTable .= "<small class='response'>  In response to ".$message->replyTo.' ('.$message->originalMsg.')</small>';
+					//} else {
 						$messageTable .= "<small>   Added by Multitude app</small>";
-					}
-					echo '<script>alert("replyTo is '.$message->replyTo.'");</script>';
+					//}
+                    $msgTmp = $message->id;
+                    foreach(array_reverse($messages) as &$messagee) {
+                        if ($messagee->replyTo != "") {
+                            if ($messagee->replyTo == $msgTmp){
+                                $messageTable .= "<tr id='messages'><td class='submessage' id='submessage".$messagee->id."'><span class='submessage'>".$messagee->message."</span>";
+                                $messageTable .= "<br /><small class='timestamp'>".$messagee->timestamp."</small>";
+                                //echo '<script>console.log("Message:" + '.$message->replyTo.' + "");</script>';
+                                $messageTable .= "<small class='response'>  In response to ".$messagee->replyTo.' ('.$messagee->originalMsg.')</small>';
+                            }
+                        }
+                    }
+					//echo '<script>alert("replyTo is '.$message->replyTo.'");</script>';
 					$messageTable .= "</td></tr><tr><td class='comment'><input name='comment' id='comment".$message->id."'></input><input type='submit' class='submit' id='submit".$message->id."' value='Reply'></input></td></tr>";
+                    }
 					$messageString .= $message->message."'],['";
 				}
 				$messageString = substr($messageString, 0, strlen($messageString) - 3)."]";
@@ -146,9 +163,9 @@
         //var canvas = document.getElementById('canvvas');
         //var list = document.getElementById('list').value.split(' ');
 		
-		drawCanvas();
+		//drawCanvas();
         
-        function drawCanvas(){
+        /*(function drawCanvas(){
             if (WordCloud.isSupported) {
 				
                 var options = {'color':'rgb(0,0,0)',
@@ -161,7 +178,7 @@
                 WordCloud(canvas, options)
             }
             
-        }
+        }*/
         
         function drawTableMessage() {
             var datas = new google.visualization.DataTable();
