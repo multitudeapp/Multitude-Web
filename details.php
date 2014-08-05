@@ -4,6 +4,11 @@
 		<link rel="stylesheet" href="assets/css/normalize.css" type="text/css" />
     	<link rel="stylesheet" href="assets/css/style-detail.css" type="text/css" />
     	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <?php
+        if (isset($_GET['station'])) {
+            echo '<title>'.htmlspecialchars($_GET['station']).' - Multitude Control Panel</title>';
+        }
+        ?>
 	</head>
 <body>
 	<div id="container">
