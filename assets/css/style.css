@@ -61,7 +61,7 @@ td {
 
 
 td {
-	display: block;
+	/* display: block; */
 	line-height: 1.6em;
     transition: .2s all ease-in-out;
     padding: 1.1em 2em;
